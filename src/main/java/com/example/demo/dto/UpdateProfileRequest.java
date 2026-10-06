@@ -1,19 +1,6 @@
-package com.example.demo.Entity;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "profiles")
-public class Profile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
-
+public class UpdateProfileRequest {
     private String name;
     private String title;
     private String bio;
@@ -22,29 +9,7 @@ public class Profile {
     private String githubUrl;
     private String linkedinUrl;
 
-    public Profile() {
-    }
-
-    public Profile(User user, String name, String title) {
-        this.user = user;
-        this.name = name;
-        this.title = title;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public UpdateProfileRequest() {
     }
 
     public String getName() {

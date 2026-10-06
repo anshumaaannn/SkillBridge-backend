@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/auth/") || path.equals("/error");
+        return path.startsWith("/auth/") || path.equals("/error") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs");
     }
 
     @Override
@@ -39,13 +39,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         String token = authorizationHeader.substring(7);
 
+        try {
+            if (jwtUtil.validateToken(token)) {
                 String email = jwtUtil.extractEmail(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
+                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
+        } catch (Exception ignored) {
+            // Ignore invalid token so unauthenticated requests fail at authorization layer
+        }
 
-
+        filterChain.doFilter(request, response);
     }
-
+}

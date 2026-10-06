@@ -1,19 +1,8 @@
-package com.example.demo.Entity;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "profiles")
-public class Profile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProfileResponse {
     private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
-
+    private Long userId;
     private String name;
     private String title;
     private String bio;
@@ -22,13 +11,19 @@ public class Profile {
     private String githubUrl;
     private String linkedinUrl;
 
-    public Profile() {
+    public ProfileResponse() {
     }
 
-    public Profile(User user, String name, String title) {
-        this.user = user;
+    public ProfileResponse(Long id, Long userId, String name, String title, String bio, String location, String profileImageUrl, String githubUrl, String linkedinUrl) {
+        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.title = title;
+        this.bio = bio;
+        this.location = location;
+        this.profileImageUrl = profileImageUrl;
+        this.githubUrl = githubUrl;
+        this.linkedinUrl = linkedinUrl;
     }
 
     public Long getId() {
@@ -39,12 +34,12 @@ public class Profile {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {

@@ -1,9 +1,9 @@
 package com.example.demo.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -31,6 +31,9 @@ public class User {
         return skills;
     }
 
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
 
     public String getEmail() {
         return email;
@@ -40,7 +43,6 @@ public class User {
     }
     public String getPassword() {
         return password;
-
     }
     public void setPassword(String password) {
         this.password = password;
@@ -51,7 +53,7 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-     public void setRole(Role role) {
+    public void setRole(Role role) {
        this.role = role;
     }
     public Role getRole() {
@@ -68,5 +70,18 @@ public class User {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
